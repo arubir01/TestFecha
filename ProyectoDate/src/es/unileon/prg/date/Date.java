@@ -68,6 +68,17 @@ public String getMonthsLeft() throws DateException
 return string.toString();	
 }
 
+private String getMonthsLeft(int month)
+{
+	StringBuilder string = new StringBuilder();
+	
+	for(int n = this.month + 1; n <= 12; n++)
+	{
+	string.append(getMonthName(n));
+	string.append(" ");
+}
+return string.toString();	
+}
 public String getDaysLeftOfMonth() 
 {
 	try {
@@ -118,64 +129,72 @@ while(ender == false);
 return attempts;		
 }
 
-public String getMonthsSameDays() throws DateException 
+
+public String getMonthsSameDays()
 {
 	StringBuilder string3 = new StringBuilder();
-	for(int m = 0; m <= 12; m++)
+	
+	for(int m = 1; m <= 12; m++)
 	{
-	if(daysOfMonth() == this.daysOfMonth())
+	if(daysOfMonth(month) == daysOfMonth(m))
 {
-	string3.append(getMonthName());
+	string3.append(getMonthName(m));
 	string3.append(" ");
 }
 }
 	return string3.toString();
 }
-
 public int daysPast()
 {
-	int daysNumbers = this.day;
+	int daysNumbers = this.day - 1;
+	try {
+		Date aDay = new Date(day,month,year);
+		for(int n = 1; n < this.month; n++)
+		{
+			aDay.setMonth(n);
+			daysNumbers += aDay.daysOfMonth();
+		}
+	} catch (DateException e) {
+	}
 	
-	for(int n = 0; n < this.month; n++)
-{
-	daysNumbers += this.daysOfMonth();
-}	
+	
+		
 	return daysNumbers;
 }
 
 public String dayOfWeek(int day)
 {
-	
 	String week = " ";
-	day = this.day + this.daysOfMonth();
-	day = day % 7;
-	switch(this.day)
+	int dia = day + daysPast();
+	dia = dia % 7;
+	switch(dia)
 {
 	case 1:
-		week = "Monday";
-		break;
+	week = "Monday";
+	break;
 	case 2: 
-		week = "Tuesday";
-		break;
+	week = "Tuesday";
+	break;
 	case 3:
-		week = "Wednesday";
-		break;
+	week = "Wednesday";
+	break;
 	case 4: 
-		week = "Thursday";
-		break;
+	week = "Thursday";
+	break;
 	case 5: 
-		week = "Friday";
-		break;
+	week = "Friday";
+	break;
 	case 6: 
-		week = "Saturday";
-		break;
+	week = "Saturday";
+	break;
 	case 7: 
-		week = "Sunday";
-		break;
+	week = "Sunday";
+	break;
 
 }
-	return week;
-}	
+return week;
+}
+
 public boolean isSameDate(Date anotherDate)
 {
 	return ((isSameDay(anotherDate)) && (isSameMonth(anotherDate)) && (isSameYear(anotherDate)));
@@ -241,12 +260,68 @@ public int daysOfMonth()
 	break;
 	}
 	return number;
+}
+
+private int daysOfMonth(int day)
+{
+	int number = 0;
+	switch (day) {
+	case 1: //next
+	case 3: //next
+	case 5: //next
+	case 7://next
+	case 8: //next
+	case 10: //next
+	case 12: 
+	number = 31;
+	break;
+	case 4: //next
+	case 6: //next
+	case 9: //next
+	case 11: number = 30;
+	break;
+	case 2:
+	number = 28;
+	break;
 	}
+	return number;
+}
 
 public String getMonthName()
 	{
 	String mes = "";
-	switch (this.month) {
+	switch (month) {
+	case 1: mes = "January";
+	break;
+	case 2: mes = "February";
+	break;
+	case 3: mes = "March";
+	break;
+	case 4: mes = "April";
+	break;
+	case 5: mes = "May";
+	break;
+	case 6: mes = "June";
+	break;
+	case 7: mes = "July";
+	break;
+	case 8: mes = "August";
+	break;
+	case 9: mes = "September";
+	break;
+	case 10: mes = "October";
+	break;
+	case 11: mes = "November";
+	break;
+	case 12: mes = "December";
+	break;
+	}
+	return mes;
+	}
+private String getMonthName(int month)
+{
+	String mes = "";
+	switch (month) {
 	case 1: mes = "January";
 	break;
 	case 2: mes = "February";
@@ -275,6 +350,7 @@ public String getMonthName()
 	return mes;
 	}
 
+
 public String getSeasonName()
 	{
 	String estacion = "";
@@ -298,6 +374,7 @@ public String getSeasonName()
 	}
 	return estacion;
 	}
+
 
 public void setMonth(int month) throws DateException
 	{
@@ -329,8 +406,9 @@ public void setYear(int year) throws DateException {
 	
 }
 public Date tomorrow()  {
+	Date tomorrow = null;
 	try {
-		Date tomorrow = new Date(day,month,year);
+		tomorrow = new Date(day,month,year);
 		day = day + 1;
 		if( day > this.daysOfMonth())
 		{
@@ -346,7 +424,7 @@ public Date tomorrow()  {
 		catch (DateException e) 
 			{
 				}
-			return tomorrow();
+			return tomorrow;
 	
 }
 /*
